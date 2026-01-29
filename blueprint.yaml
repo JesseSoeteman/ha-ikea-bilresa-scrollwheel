@@ -258,7 +258,7 @@ action:
         {% else %}
           unknown
         {% endif %}
-      action: "var_action_group_{{ group_number }}_{{ action_type }}"
+      action_name: "var_action_group_{{ group_number }}_{{ action_type }}"
     
       dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
   - choose:
@@ -284,5 +284,5 @@ action:
           - condition: template
             value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
         sequence:
-          - action: !input action
+          - action: !input action_name
     default: [] 
