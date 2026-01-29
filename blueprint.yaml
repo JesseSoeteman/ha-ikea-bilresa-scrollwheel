@@ -257,7 +257,7 @@ action:
         sequence:
           - action: input_number.set_value
             target:
-              entity_id: "{{ target_group }}"
+              entity_id: "input_number.{{ target_group }}"
             data:
               value: "{{ min(100, (states(target_group) | float(0)) + (dimming_amount * step)) }}"
       - conditions:
