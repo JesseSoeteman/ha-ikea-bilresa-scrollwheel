@@ -227,6 +227,14 @@ action:
         {% else %}
           3
         {% endif %}
+      # target_dimmer: >
+      #   {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
+      #     {{ dimming_1 }}
+      #   {% elif trigger.id in ['btn4', 'btn5', 'btn6'] %}
+      #     {{ dimming_2 }}
+      #   {% else %}
+      #     {{ dimming_3 }}
+      #   {% endif %}
       target_group: "dimming_{{ group_number }}"
       action_type_raw: "{{ trigger.to_state.attributes.event_type }}"
       action_type: >
@@ -240,10 +248,7 @@ action:
           long_press
         {% elif action_type_raw == 'long_press_release' %}
           long_press_release
-        {% else %}
-          unknown
         {% endif %}
-      action_name: "var_action_group_{{ group_number }}_{{ action_type }}"
     
       dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
   - choose:
@@ -253,7 +258,7 @@ action:
         sequence:
           - action: input_number.set_value
             target:
-              entity_id: target_group
+              entity_id: "{{ target_group }}"
             data:
               value: "{{ min(100, (states(target_group) | float(0)) + (dimming_amount * step)) }}"
       - conditions:
@@ -262,7 +267,7 @@ action:
         sequence:
           - action: input_number.set_value
             target:
-              entity_id: target_group
+              entity_id: "{{ target_group }}"
             data:
               value: "{{ max(0, (states(target_group) | float(0)) - (dimming_amount * step)) }}"
       - conditions:
