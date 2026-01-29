@@ -218,21 +218,6 @@ action:
       dimming_1: !input target_dimming_1
       dimming_2: !input target_dimming_2
       dimming_3: !input target_dimming_3
-      var_action_group_1_single: !input action_group_1_single
-      var_action_group_1_double: !input action_group_1_double
-      var_action_group_1_triple: !input action_group_1_triple
-      var_action_group_1_long_press: !input action_group_1_long_press
-      var_action_group_1_long_press_release: !input action_group_1_long_press_release
-      var_action_group_2_single: !input action_group_2_single
-      var_action_group_2_double: !input action_group_2_double
-      var_action_group_2_triple: !input action_group_2_triple
-      var_action_group_2_long_press: !input action_group_2_long_press
-      var_action_group_2_long_press_release: !input action_group_2_long_press_release
-      var_action_group_3_single: !input action_group_3_single
-      var_action_group_3_double: !input action_group_3_double
-      var_action_group_3_triple: !input action_group_3_triple
-      var_action_group_3_long_press: !input action_group_3_long_press
-      var_action_group_3_long_press_release: !input action_group_3_long_press_release
       step: !input dimming_step
       group_number: >
         {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
@@ -284,5 +269,65 @@ action:
           - condition: template
             value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
         sequence:
-          - action: !input action_name
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 1 and action_type == 'single' }}"
+                sequence: !input action_group_1_single
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 1 and action_type == 'double' }}"
+                sequence: !input action_group_1_double
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 1 and action_type == 'triple' }}"
+                sequence: !input action_group_1_triple
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 1 and action_type == 'long_press' }}"
+                sequence: !input action_group_1_long_press
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 1 and action_type == 'long_press_release' }}"
+                sequence: !input action_group_1_long_press_release
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 2 and action_type == 'single' }}"
+                sequence: !input action_group_2_single
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 2 and action_type == 'double' }}"
+                sequence: !input action_group_2_double
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 2 and action_type == 'triple' }}"
+                sequence: !input action_group_2_triple
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 2 and action_type == 'long_press' }}"
+                sequence: !input action_group_2_long_press
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 2 and action_type == 'long_press_release' }}"
+                sequence: !input action_group_2_long_press_release
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 3 and action_type == 'single' }}"
+                sequence: !input action_group_3_single
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 3 and action_type == 'double' }}"
+                sequence: !input action_group_3_double
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 3 and action_type == 'triple' }}"
+                sequence: !input action_group_3_triple
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 3 and action_type == 'long_press' }}"
+                sequence: !input action_group_3_long_press
+              - conditions:
+                  - condition: template
+                    value_template: "{{ group_number == 3 and action_type == 'long_press_release' }}"
+                sequence: !input action_group_3_long_press_release
     default: [] 
