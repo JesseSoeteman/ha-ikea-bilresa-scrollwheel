@@ -227,15 +227,14 @@ action:
         {% else %}
           3
         {% endif %}
-      # target_dimmer: >
-      #   {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
-      #     {{ dimming_1 }}
-      #   {% elif trigger.id in ['btn4', 'btn5', 'btn6'] %}
-      #     {{ dimming_2 }}
-      #   {% else %}
-      #     {{ dimming_3 }}
-      #   {% endif %}
-      target_group: "dimming_{{ group_number }}"
+      target_group: >
+        {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
+          {{ dimming_1 }}
+        {% elif trigger.id in ['btn4', 'btn5', 'btn6'] %}
+          {{ dimming_2 }}
+        {% else %}
+          {{ dimming_3 }}
+        {% endif %}
       action_type_raw: "{{ trigger.to_state.attributes.event_type }}"
       action_type: >
         {% if action_type_raw == 'multi_press_1' %}
