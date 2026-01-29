@@ -243,6 +243,7 @@ action:
         {% else %}
           unknown
         {% endif %}
+      action: "action_group_{{ group_number }}_{{ action_type }}"
     
       dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
   - choose:
@@ -262,11 +263,11 @@ action:
           - action: input_number.set_value
             target:
               entity_id: "{{ target_group }}"
-            data:
+            data: 
               value: "{{ max(0, (states(target_group) | float(0)) - (dimming_amount * step)) }}"
       - conditions:
           - condition: template
             value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
         sequence:
-          - action: !input "action_group_{{ group_number }}_{{ action_type }}"
+          - action: !input action
     default: [] 
