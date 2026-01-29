@@ -3,24 +3,6 @@ blueprint:
   description: "Control dimming with IKEA Bilresa remote with scroll wheel"
   domain: automation
   input:
-    target_dimming_1:
-      name: Dimming Value
-      selector:
-        entity:
-          filter:
-            - domain: input_number
-    target_dimming_2:
-      name: Dimming Value
-      selector:
-        entity:
-          filter:
-            - domain: input_number
-    target_dimming_3:
-      name: Dimming Value
-      selector:
-        entity:
-          filter:
-            - domain: input_number
     button_1:
       name: Button 1
       selector:
@@ -93,6 +75,25 @@ blueprint:
             - domain: event
           multiple: false
           reorder: false
+    target_dimming_1:
+      name: Dimming Value
+      selector:
+        entity:
+          filter:
+            - domain: input_number
+    target_dimming_2:
+      name: Dimming Value
+      selector:
+        entity:
+          filter:
+            - domain: input_number
+    target_dimming_3:
+      name: Dimming Value 
+      default: []
+      selector:
+        entity:
+          filter:
+            - domain: input_number
     dimming_step:
       name: Dimming Step
       description: Dimming Step
@@ -104,6 +105,81 @@ blueprint:
           step: 1.0
           unit_of_measurement: "%"
           mode: slider
+    action_group_1_single:
+      name: "Action Group 1 - Single Press"
+      default: []
+      selector:
+        action: {}
+    action_group_1_double:
+      name: "Action Group 1 - Double Press"
+      default: []
+      selector:
+        action: {}
+    action_group_1_triple:
+      name: "Action Group 1 - Triple Press"
+      default: []
+      selector:
+        action: {}
+    action_group_1_long_press:
+      name: "Action Group 1 - Long Press"
+      default: []
+      selector:
+        action: {}
+    action_group_1_long_press_release:
+      name: "Action Group 1 - Long Press Release"
+      default: []
+      selector:
+        action: {}
+    action_group_2_single:
+      name: "Action Group 2 - Single Press"
+      default: []
+      selector:
+        action: {}
+    action_group_2_double:
+      name: "Action Group 2 - Double Press"
+      default: []
+      selector:
+        action: {}
+    action_group_2_triple:
+      name: "Action Group 2 - Triple Press"
+      default: []
+      selector:
+        action: {}
+    action_group_2_long_press:
+      name: "Action Group 2 - Long Press"
+      default: []
+      selector:
+        action: {}
+    action_group_2_long_press_release:
+      name: "Action Group 2 - Long Press Release"
+      default: []
+      selector:
+        action: {}
+    action_group_3_single:
+      name: "Action Group 3 - Single Press"
+      default: []
+      selector:
+        action: {}
+    action_group_3_double:
+      name: "Action Group 3 - Double Press"
+      default: []
+      selector:
+        action: {}
+    action_group_3_triple:
+      name: "Action Group 3 - Triple Press"
+      default: []
+      selector:
+        action: {}
+    action_group_3_long_press:
+      name: "Action Group 3 - Long Press"
+      default: []
+      selector:
+        action: {}
+    action_group_3_long_press_release:
+      name: "Action Group 3 - Long Press Release"
+      default: []
+      selector:
+        action: {}
 
 mode: restart
 max_exceeded: silent
@@ -143,14 +219,31 @@ action:
       dimming_2: !input target_dimming_2
       dimming_3: !input target_dimming_3
       step: !input dimming_step
-      target_dimmer: >
+      group_number: >
         {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
-          {{ dimming_1 }}
+          1
         {% elif trigger.id in ['btn4', 'btn5', 'btn6'] %}
-          {{ dimming_2 }}
+          2
         {% else %}
-          {{ dimming_3 }}
+          3
         {% endif %}
+      target_group: "dimming_{{ group_number }}"
+      action_type_raw: "{{ trigger.to_state.attributes.event_type }}"
+      action_type: >
+        {% if action_type_raw == 'multi_press_1' %}
+          single
+        {% elif action_type_raw == 'multi_press_2' %}
+          double
+        {% elif action_type_raw == 'multi_press_3' %}
+          triple
+        {% elif action_type_raw == 'long_press' %}
+          long_press
+        {% elif action_type_raw == 'long_press_release' %}
+          long_press_release
+        {% else %}
+          unknown
+        {% endif %}
+    
       dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
   - choose:
       - conditions:
@@ -159,19 +252,21 @@ action:
         sequence:
           - action: input_number.set_value
             target:
-              entity_id: "{{ target_dimmer }}"
+              entity_id: "{{ target_group }}"
             data:
-              value: "{{ min(100, (states(target_dimmer) | float(0)) + (dimming_amount * step)) }}"
+              value: "{{ min(100, (states(target_group) | float(0)) + (dimming_amount * step)) }}"
       - conditions:
           - condition: template
             value_template: "{{ trigger.id in ['btn2', 'btn5', 'btn8'] }}"
         sequence:
           - action: input_number.set_value
             target:
-              entity_id: "{{ target_dimmer }}"
+              entity_id: "{{ target_group }}"
             data:
-              value: "{{ max(0, (states(target_dimmer) | float(0)) - (dimming_amount * step)) }}"
+              value: "{{ max(0, (states(target_group) | float(0)) - (dimming_amount * step)) }}"
       - conditions:
           - condition: template
             value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
-        sequence: []
+        sequence:
+          - action: !input action_group_{{ group_number }}_{{ action_type }}
+    default: [] 
