@@ -218,6 +218,21 @@ action:
       dimming_1: !input target_dimming_1
       dimming_2: !input target_dimming_2
       dimming_3: !input target_dimming_3
+      var_action_group_1_single: !input action_group_1_single
+      var_action_group_1_double: !input action_group_1_double
+      var_action_group_1_triple: !input action_group_1_triple
+      var_action_group_1_long_press: !input action_group_1_long_press
+      var_action_group_1_long_press_release: !input action_group_1_long_press_release
+      var_action_group_2_single: !input action_group_2_single
+      var_action_group_2_double: !input action_group_2_double
+      var_action_group_2_triple: !input action_group_2_triple
+      var_action_group_2_long_press: !input action_group_2_long_press
+      var_action_group_2_long_press_release: !input action_group_2_long_press_release
+      var_action_group_3_single: !input action_group_3_single
+      var_action_group_3_double: !input action_group_3_double
+      var_action_group_3_triple: !input action_group_3_triple
+      var_action_group_3_long_press: !input action_group_3_long_press
+      var_action_group_3_long_press_release: !input action_group_3_long_press_release
       step: !input dimming_step
       group_number: >
         {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
@@ -243,7 +258,7 @@ action:
         {% else %}
           unknown
         {% endif %}
-      action: "action_group_{{ group_number }}_{{ action_type }}"
+      action: "var_action_group_{{ group_number }}_{{ action_type }}"
     
       dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
   - choose:
