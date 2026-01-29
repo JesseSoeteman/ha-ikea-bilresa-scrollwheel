@@ -268,5 +268,5 @@ action:
           - condition: template
             value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
         sequence:
-          - action: !input action_group_{{ group_number }}_{{ action_type }}
+          - action: !input "action_group_{{ group_number }}_{{ action_type }}"
     default: [] 
