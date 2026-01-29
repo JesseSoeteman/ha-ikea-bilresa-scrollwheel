@@ -255,7 +255,7 @@ action:
           - condition: template
             value_template: "{{ trigger.id in ['btn1', 'btn4', 'btn7'] }}"
           - condition: template
-            value_template: "{{ target_group != '' and target_group != none }}"
+            value_template: "{{ target_group != [] }}"
         sequence:
           - action: input_number.set_value
             target:
@@ -266,7 +266,7 @@ action:
           - condition: template
             value_template: "{{ trigger.id in ['btn2', 'btn5', 'btn8'] }}"
           - condition: template
-            value_template: "{{ target_group != '' and target_group != none }}"
+            value_template: "{{ target_group != [] }}"
         sequence:
           - action: input_number.set_value
             target:
