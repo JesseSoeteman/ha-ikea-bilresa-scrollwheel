@@ -245,7 +245,7 @@ action:
           triple
         {% elif action_type_raw == 'long_press' %}
           long_press
-        {% elif action_type_raw == 'long_press_release' %}
+        {% elif action_type_raw == 'long_release' %}
           long_press_release
         {% endif %}
     
