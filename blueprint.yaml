@@ -1,0 +1,198 @@
+blueprint:
+  name: IKEA Bilresa (with scroll wheel)
+  description: "TEST 2"
+  domain: automation
+  input:
+    target_dimming_1:
+      name: Dimming Value
+      selector:
+        entity:
+          filter:
+            - domain: input_number
+    target_dimming_2:
+      name: Dimming Value
+      selector:
+        entity:
+          filter:
+            - domain: input_number
+    target_dimming_3:
+      name: Dimming Value
+      selector:
+        entity:
+          filter:
+            - domain: input_number
+    target_button_1:
+      name: Button helper
+      description: Catch button events double / longpress via a helper
+      selector:
+        entity:
+          filter:
+            - domain: input_button
+    target_button_2:
+      name: Button helper
+      description: Catch button events double / longpress via a helper
+      selector:
+        entity:
+          filter:
+            - domain: input_button
+    target_button_3:
+      name: Button helper
+      description: Catch button events double / longpress via a helper
+      selector:
+        entity:
+          filter:
+            - domain: input_button
+    button_1:
+      name: Button 1
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_2:
+      name: Button 2
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_3:
+      name: Button 3
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_4:
+      name: Button 4
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_5:
+      name: Button 5
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_6:
+      name: Button 6
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_7:
+      name: Button 7
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_8:
+      name: Button 8
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    button_9:
+      name: Button 9
+      selector:
+        entity:
+          filter:
+            - domain: event
+          multiple: false
+          reorder: false
+    dimming_step:
+      name: Dimming Step
+      description: Dimming Step
+      default: 5
+      selector:
+        number:
+          min: 1.0
+          max: 10.0
+          step: 1.0
+          unit_of_measurement: "%"
+          mode: slider
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: state
+    entity_id: !input button_1
+    id: btn1
+  - platform: state
+    entity_id: !input button_2
+    id: btn2
+  - platform: state
+    entity_id: !input button_3
+    id: btn3
+  - platform: state
+    entity_id: !input button_4
+    id: btn4
+  - platform: state
+    entity_id: !input button_5
+    id: btn5
+  - platform: state
+    entity_id: !input button_6
+    id: btn6
+  - platform: state
+    entity_id: !input button_7
+    id: btn7
+  - platform: state
+    entity_id: !input button_8
+    id: btn8
+  - platform: state
+    entity_id: !input button_9
+    id: btn9
+
+action:
+  - variables:
+      dimming_1: !input target_dimming_1
+      dimming_2: !input target_dimming_2
+      dimming_3: !input target_dimming_3
+      step: !input dimming_step
+      target_dimmer: >
+        {% if trigger.id in ['btn1', 'btn2', 'btn3'] %}
+          {{ dimming_1 }}
+        {% elif trigger.id in ['btn4', 'btn5', 'btn6'] %}
+          {{ dimming_2 }}
+        {% else %}
+          {{ dimming_3 }}
+        {% endif %}
+      dimming_amount: "{{ trigger.to_state.attributes.totalNumberOfPressesCounted }}"
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id in ['btn1', 'btn4', 'btn7'] }}"
+        sequence:
+          - action: input_number.set_value
+            target:
+              entity_id: "{{ target_dimmer }}"
+            data:
+              value: "{{ min(100, (states(target_dimmer) | float(0)) + (dimming_amount * step)) }}"
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id in ['btn2', 'btn5', 'btn8'] }}"
+        sequence:
+          - action: input_number.set_value
+            target:
+              entity_id: "{{ target_dimmer }}"
+            data:
+              value: "{{ max(0, (states(target_dimmer) | float(0)) - (dimming_amount * step)) }}"
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id in ['btn3', 'btn6', 'btn9'] }}"
+        sequence: []
