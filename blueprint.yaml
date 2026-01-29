@@ -1,6 +1,6 @@
 blueprint:
   name: IKEA Bilresa (with scroll wheel)
-  description: "TEST 2"
+  description: "Control dimming with IKEA Bilresa remote with scroll wheel"
   domain: automation
   input:
     target_dimming_1:
@@ -21,27 +21,6 @@ blueprint:
         entity:
           filter:
             - domain: input_number
-    target_button_1:
-      name: Button helper
-      description: Catch button events double / longpress via a helper
-      selector:
-        entity:
-          filter:
-            - domain: input_button
-    target_button_2:
-      name: Button helper
-      description: Catch button events double / longpress via a helper
-      selector:
-        entity:
-          filter:
-            - domain: input_button
-    target_button_3:
-      name: Button helper
-      description: Catch button events double / longpress via a helper
-      selector:
-        entity:
-          filter:
-            - domain: input_button
     button_1:
       name: Button 1
       selector:
