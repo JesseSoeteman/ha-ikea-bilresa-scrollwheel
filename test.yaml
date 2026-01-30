@@ -49,12 +49,12 @@ blueprint:
           step: 1
           unit_of_measurement: "%"
     switch_entity:
-      name: Switch
+      name: Switch (input boolean)
       description: Switch entity to trigger the automation
       selector:
         entity:
           filter:
-            - domain: switch
+            - domain: input_boolean
           multiple: false
 
 trigger:
