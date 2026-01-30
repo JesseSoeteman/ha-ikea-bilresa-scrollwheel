@@ -78,5 +78,5 @@ action:
     target:
       entity_id: !input light_entity
     data:
-      brightness_pct: "{{ ((dimming_pct * (peak_brightness - base_brightness) / 100 + base_brightness)) | int }}"
-      color_temp_kelvin: !input light_temperature
+      brightness_pct: "{{ (dimming_pct * (peak_brightness - base_brightness) / 100 + base_brightness) | round(0) }}"
+      kelvin: !input light_temperature
