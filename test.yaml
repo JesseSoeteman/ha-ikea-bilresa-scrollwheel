@@ -24,10 +24,10 @@ blueprint:
       description: Light color temperature value
       selector:
         number:
-          min: 150
-          max: 500
+          min: 2000
+          max: 6500
           step: 1
-          unit_of_measurement: mirek
+          unit_of_measurement: K
     base_brightness:
       name: Base Brightness
       description: Minimum brightness in percent
@@ -79,4 +79,4 @@ action:
       entity_id: !input light_entity
     data:
       brightness_pct: "{{ ((dimming_pct * (peak_brightness - base_brightness) / 100 + base_brightness)) | int }}"
-      color_temp_mirek: !input light_temperature
+      color_temp_kelvin: !input light_temperature
